@@ -1,0 +1,96 @@
+﻿@page "/fetchdata"
+@using CsvHelper
+@using System.Globalization
+@using CsvHelper.Configuration
+@using CsvHelper.Configuration.Attributes
+@inject HttpClient Http
+
+<PageTitle>Meklēt</PageTitle>
+
+<h1>Meklēt</h1>
+
+<p>Šeit varēs meklēt</p>
+
+@if (virtues == null)
+{
+    <p><em>Ielādē...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Klase</th>
+                <th>Links</th>
+                <th>Tēma</th>
+                <th>Stunda</th>
+                
+                <th>Aktivitāte</th>
+                <th>Nosaukums</th>
+                <th>Apraksts</th>
+                <th>Tips</th>
+                <th>Video garums</th>
+                <th>Avots</th>
+                
+                <th>SKOLA2030 VĒRTĪBAS</th>
+                <th>SKOLA2030 tikumi</th>
+                <th>e-TAP vērtības</th>
+                <th>e-TAP tikumi</th>
+                
+                <th>Komentāri</th>
+            </tr>
+        </thead>
+        <tbody>
+        @if (virtues != null)
+        {
+            foreach (var virtue in virtues)
+            {
+                <tr>
+                    <td>@virtue.Grade</td>
+                    <td>@virtue.Url</td>
+                    <td>@virtue.Topic</td>
+                    <td>@virtue.Lesson</td>
+                    
+                    <td>@virtue.Activity</td>
+                    <td>@virtue.Name</td>
+                    <td>@virtue.Description</td>
+                    <td>@virtue.ResourceType</td>
+                    <td>@virtue.VideoMinutes</td>
+                    <td>@virtue.Source</td>
+                    <td>@(string.Join(";", virtue.School2030Values))</td>
+                    <td>@(string.Join(";", virtue.School2030Virtues))</td>
+                    <td>@(string.Join(";", virtue.EtapValues))</td>
+                    <td>@(string.Join(";", virtue.EtapVirtues))</td>
+                    
+                    <td>@virtue.Comments</td>
+                    
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    private VirtueRecord[]? virtues; 
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await Http.GetAsync("sample-data/virtues.csv");
+        response.EnsureSuccessStatusCode();
+
+        await using var stream = await response.Content.ReadAsStreamAsync();
+        using (var reader = new StreamReader(stream, true))
+        using (var csv = new CsvReader(reader, CsvConfig))
+        {
+            var records = csv.GetRecords<VirtueRecord>();
+            virtues = records.ToArray();
+        }
+    }
+    
+    private CsvConfiguration CsvConfig = new CsvConfiguration(new CultureInfo("lv-lv"))
+    {
+        Delimiter = ",", // Enforce ',' as delimiter
+        PrepareHeaderForMatch = header => header.Header.ToLower() // Ignore casing
+    };
+}
