@@ -40,4 +40,7 @@ public class VirtueRecord
 
     [Index(14)]
     public string Comments { get; set; }
+
+    [Ignore]
+    public string MatchedQ { get; set; }
 }

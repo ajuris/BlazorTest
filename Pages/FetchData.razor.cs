@@ -33,18 +33,33 @@ namespace BlazorTest.Pages
             if (!string.IsNullOrWhiteSpace(searchModel?.Query))
             {
                 var q = searchModel.Query.ToLowerInvariant();
+
                 filteredVirtues = virtues.Where(x =>
                     x.EtapValues.Any(v => v.Contains(q)) ||
                     x.EtapVirtues.Any(v => v.Contains(q)) ||
                     x.School2030Values.Any(v => v.Contains(q)) ||
                     x.School2030Virtues.Any(v => v.Contains(q)))
                 .ToList();
+
+                if (filteredVirtues.Count > 0)
+                {
+                    var allMatched = new List<string>();
+                    foreach (var resultItem in filteredVirtues)
+                    {
+                        allMatched.AddRange(resultItem.EtapValues.Where(x => x.Contains(q)));
+                        allMatched.AddRange(resultItem.EtapVirtues.Where(x => x.Contains(q)));
+                        allMatched.AddRange(resultItem.School2030Values.Where(x => x.Contains(q)));
+                        allMatched.AddRange(resultItem.School2030Virtues.Where(x => x.Contains(q)));
+                    }
+                   
+                    searchModel.MatchedQ = string.Join(", ", allMatched.Distinct());
+                }
             }
         }
 
         protected void ShowAll()
         {
-            filteredVirtues = virtues;
+            filteredVirtues = virtues.ToList();
             searchModel.Query = "";
         }
 
@@ -65,7 +80,7 @@ namespace BlazorTest.Pages
 
     public class SearchModel
     {
-
         public string Query { get; set; } = "";
+        public string MatchedQ { get; set; } = "";
     }
 }

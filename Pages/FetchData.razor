@@ -37,12 +37,16 @@ else
 {
     @if (!string.IsNullOrWhiteSpace(searchModel.Query))
     {
-        <p>@filteredVirtues.Count() rezultāti meklējumam "@Encoder.HtmlEncode(searchModel.Query)"</p>
+        <p>
+            @filteredVirtues.Count rezultāti meklējumam "@Encoder.HtmlEncode(searchModel.Query)"
+            @(!string.IsNullOrEmpty(searchModel.MatchedQ) && !string.Equals(searchModel.Query, searchModel.MatchedQ, StringComparison.InvariantCultureIgnoreCase)
+                ?  $" ({@Encoder.HtmlEncode(searchModel.MatchedQ)})"  : "")
+        </p>
     }
 
     @if (filteredVirtues.Any())
     {
-        <table class="table table-striped">
+        <table class="table table-striped table-hover table-sm">
             <thead>
                 <tr>
                     <th>Nosaukums</th>

@@ -9,7 +9,7 @@ public class MultivalueConverter : TypeConverter
     public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
     {
         if (text == "") return Array.Empty<string>();
-        string[] allElements = text.Split(';');
+        var allElements = text.Split(';').Select(x => x.Trim()).ToArray();
         return allElements;
     }
 
