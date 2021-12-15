@@ -46,32 +46,21 @@ else
             <thead>
                 <tr>
                     <th>Nosaukums</th>
-                
+                    <th>Saite</th>
+                    <th>Resursa veids</th>
                     <th>Klase</th>
                     <th>Tēma</th>
-                    <th>Stunda</th>
-
-                    <th>Links</th>
+                    <th>Nodarbība</th>
+                    <th>Apraksts</th>
                     <th>Video garums</th>
+                    <th>Resursa veidotājs</th>
 
-                    <th>SKOLA2030 VĒRTĪBAS</th>
+                    <th>SKOLA2030 vērtības</th>
                     <th>SKOLA2030 tikumi</th>
                     <th>e-TAP vērtības</th>
                     <th>e-TAP tikumi</th>
 
-                    @*
-                
-                
-                    <th>Aktivitāte</th>
-                
-                    <th>Apraksts</th>
-                    <th>Tips</th>
-                
-                    <th>Avots</th>
-                
-                
-                
-                    <th>Komentāri</th>*@
+                    <th>Komentāri</th>
                 </tr>
             </thead>
             <tbody>
@@ -79,60 +68,39 @@ else
             {
                 <tr>
                     <td>@virtue.Name</td>
-                
+                    <td><a href="@virtue.Url">Saite</a></td>
+                    <td>@virtue.ResourceType</td>               
                     <td>@virtue.Grade</td>
                     <td>@virtue.Topic</td>
                     <td>@virtue.Lesson</td>
-
-                    <td><a href="@virtue.Url">Links</a></td>
-                    <td>@virtue.VideoMinutes</td>
-
-                
-
+                    <td>@virtue.Description</td>                 
+                    <td>@virtue.VideoMinutes</td>              
+                    <td>@virtue.Source</td>
 
                     <td>@foreach (var item in virtue.School2030Values)
                         {
-                            <span class="badge rounded-pill bg-secondary">@item</span>            
+                            <span class="badge rounded-pill bg-secondary ms-1">@item</span>            
                         }
                     </td>
 
                     <td>@foreach (var item in virtue.School2030Virtues)
                         {
-                            <span class="badge rounded-pill bg-secondary">@item</span>            
+                            <span class="badge rounded-pill bg-secondary ms-1">@item</span>            
                         }
                     </td>
 
                     <td>@foreach (var item in virtue.EtapValues)
                         {
-                            <span class="badge rounded-pill bg-secondary">@item</span>            
+                            <span class="badge rounded-pill bg-secondary ms-1">@item</span>            
                         }
                     </td>
 
                     <td>@foreach (var item in virtue.EtapVirtues)
                         {
-                            <span class="badge rounded-pill bg-secondary">@item</span>            
+                            <span class="badge rounded-pill bg-secondary ms-1">@item</span>            
                         }
                     </td>
-
-                    @*<td>@(string.Join(";", virtue.School2030Values))</td>
-                    <td>@(string.Join(";", virtue.School2030Virtues))</td>
-                    <td>@(string.Join(";", virtue.EtapValues))</td>
-                    <td>@(string.Join(";", virtue.EtapVirtues))</td>*@
-
-                
-
-                    @*
-                
-                    
-                    <td>@virtue.Activity</td>
-                    <td>@virtue.Description</td>
-                    <td>@virtue.ResourceType</td>
-                
-                    <td>@virtue.Source</td>
-                
-                    
-                    <td>@virtue.Comments</td>*@
-                    
+                    <td>@virtue.Comments</td>
                 </tr>
             }
             </tbody>
