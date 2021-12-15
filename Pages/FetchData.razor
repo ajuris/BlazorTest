@@ -1,14 +1,30 @@
 ﻿@page "/fetchdata"
+@using Microsoft.Security.Application
 @inject HttpClient Http
+
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Meklēt</button>
-      </form>
+
+      <EditForm Model="@searchModel" OnSubmit="@OnSearch" class="d-flex">
+         <InputText @bind-Value="searchModel.Query" class="form-control" type="search" placeholder="Meklēt" aria-label="Search"  />
+         <button class="btn btn-success ms-1" type="submit">Meklēt</button>
+      </EditForm>
+
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+        <li class="nav-item">
+            <button class="btn btn-outline-secondary ms-1" type="button" @onclick="ClearResults">Notīrīt rezultātus</button>
+        </li>
+        <li class="nav-item">
+            <button class="btn btn-outline-secondary ms-1" type="button" @onclick="ShowAll">Rādīt visus ierakstus</button>
+        </li>
+
+      </ul>
     </div>
   </div>
 </nav>
@@ -19,100 +35,107 @@
 }
 else
 {
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                
-                <th>Nosaukums</th>
-                
-                <th>Klase</th>
-                <th>Tēma</th>
-                <th>Stunda</th>
+    @if (!string.IsNullOrWhiteSpace(searchModel.Query))
+    {
+        <p>@filteredVirtues.Count() rezultāti meklējumam "@Encoder.HtmlEncode(searchModel.Query)"</p>
+    }
 
-                <th>Links</th>
-                <th>Video garums</th>
+    @if (filteredVirtues.Any())
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nosaukums</th>
+                
+                    <th>Klase</th>
+                    <th>Tēma</th>
+                    <th>Stunda</th>
 
-                <th>SKOLA2030 VĒRTĪBAS</th>
-                <th>SKOLA2030 tikumi</th>
-                <th>e-TAP vērtības</th>
-                <th>e-TAP tikumi</th>
+                    <th>Links</th>
+                    <th>Video garums</th>
 
-                @*
-                
-                
-                <th>Aktivitāte</th>
-                
-                <th>Apraksts</th>
-                <th>Tips</th>
-                
-                <th>Avots</th>
+                    <th>SKOLA2030 VĒRTĪBAS</th>
+                    <th>SKOLA2030 tikumi</th>
+                    <th>e-TAP vērtības</th>
+                    <th>e-TAP tikumi</th>
+
+                    @*
                 
                 
+                    <th>Aktivitāte</th>
                 
-                <th>Komentāri</th>*@
-            </tr>
-        </thead>
-        <tbody>
-        @foreach (var virtue in virtues)
-        {
-            <tr>
-                <td>@virtue.Name</td>
+                    <th>Apraksts</th>
+                    <th>Tips</th>
                 
-                <td>@virtue.Grade</td>
-                <td>@virtue.Topic</td>
-                <td>@virtue.Lesson</td>
-
-                <td><a href="@virtue.Url">Links</a></td>
-                <td>@virtue.VideoMinutes</td>
-
+                    <th>Avots</th>
                 
+                
+                
+                    <th>Komentāri</th>*@
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var virtue in filteredVirtues)
+            {
+                <tr>
+                    <td>@virtue.Name</td>
+                
+                    <td>@virtue.Grade</td>
+                    <td>@virtue.Topic</td>
+                    <td>@virtue.Lesson</td>
 
-
-                <td>@foreach (var item in virtue.School2030Values)
-                    {
-                        <span class="badge rounded-pill bg-secondary">@item</span>            
-                    }
-                </td>
-
-                <td>@foreach (var item in virtue.School2030Virtues)
-                    {
-                        <span class="badge rounded-pill bg-secondary">@item</span>            
-                    }
-                </td>
-
-                <td>@foreach (var item in virtue.EtapValues)
-                    {
-                        <span class="badge rounded-pill bg-secondary">@item</span>            
-                    }
-                </td>
-
-                <td>@foreach (var item in virtue.EtapVirtues)
-                    {
-                        <span class="badge rounded-pill bg-secondary">@item</span>            
-                    }
-                </td>
-
-                @*<td>@(string.Join(";", virtue.School2030Values))</td>
-                <td>@(string.Join(";", virtue.School2030Virtues))</td>
-                <td>@(string.Join(";", virtue.EtapValues))</td>
-                <td>@(string.Join(";", virtue.EtapVirtues))</td>*@
+                    <td><a href="@virtue.Url">Links</a></td>
+                    <td>@virtue.VideoMinutes</td>
 
                 
 
-                @*
+
+                    <td>@foreach (var item in virtue.School2030Values)
+                        {
+                            <span class="badge rounded-pill bg-secondary">@item</span>            
+                        }
+                    </td>
+
+                    <td>@foreach (var item in virtue.School2030Virtues)
+                        {
+                            <span class="badge rounded-pill bg-secondary">@item</span>            
+                        }
+                    </td>
+
+                    <td>@foreach (var item in virtue.EtapValues)
+                        {
+                            <span class="badge rounded-pill bg-secondary">@item</span>            
+                        }
+                    </td>
+
+                    <td>@foreach (var item in virtue.EtapVirtues)
+                        {
+                            <span class="badge rounded-pill bg-secondary">@item</span>            
+                        }
+                    </td>
+
+                    @*<td>@(string.Join(";", virtue.School2030Values))</td>
+                    <td>@(string.Join(";", virtue.School2030Virtues))</td>
+                    <td>@(string.Join(";", virtue.EtapValues))</td>
+                    <td>@(string.Join(";", virtue.EtapVirtues))</td>*@
+
+                
+
+                    @*
                 
                     
-                <td>@virtue.Activity</td>
-                <td>@virtue.Description</td>
-                <td>@virtue.ResourceType</td>
+                    <td>@virtue.Activity</td>
+                    <td>@virtue.Description</td>
+                    <td>@virtue.ResourceType</td>
                 
-                <td>@virtue.Source</td>
+                    <td>@virtue.Source</td>
                 
                     
-                <td>@virtue.Comments</td>*@
+                    <td>@virtue.Comments</td>*@
                     
-            </tr>
-        }
-        </tbody>
-    </table>
+                </tr>
+            }
+            </tbody>
+        </table>    
+    }
 }
