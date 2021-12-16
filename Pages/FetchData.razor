@@ -35,7 +35,7 @@
 else
 {
     <p>
-        @filteredVirtues.Count rezultāti @(!string.IsNullOrEmpty(searchModel.Query) ? $" meklējumam {@Encoder.HtmlEncode(searchModel.Query)}\"" : "")
+        @filteredVirtues.Count rezultāti @(!string.IsNullOrEmpty(searchModel.Query) ? $" meklējumam \"{@Encoder.HtmlEncode(searchModel.Query)}\"" : "")
         @(!string.IsNullOrEmpty(searchModel.MatchedQ) && !string.Equals(searchModel.Query, searchModel.MatchedQ, StringComparison.InvariantCultureIgnoreCase)
             ?  $" ({@Encoder.HtmlEncode(searchModel.MatchedQ)})"  : "")
     </p>
