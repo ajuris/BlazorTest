@@ -36,7 +36,7 @@
 }
 else
 {
-    <p>
+    <p class="small">
         @filteredVirtues.Count rezultāti @(!string.IsNullOrEmpty(searchModel.Query) ? $" meklējumam \"{@Encoder.HtmlEncode(searchModel.Query)}\"" : "")
         @(!string.IsNullOrEmpty(searchModel.MatchedQ) && !string.Equals(searchModel.Query, searchModel.MatchedQ, StringComparison.InvariantCultureIgnoreCase)
             ?  $" ({@Encoder.HtmlEncode(searchModel.MatchedQ)})"  : "")
@@ -113,14 +113,14 @@ else
                     @if (selectedVirtue.Url.StartsWith("http"))
                     {
                         <a href="@selectedVirtue.Url">@selectedVirtue.Url</a>
-                    } else
+                    } 
+                    else
                     {
                         <span>selectedVirtue?.Url</span>
                     }
                     </p>
                 </HxListGroupItem>
             }
-
 
             @if (selectedVirtue?.School2030Values != null && selectedVirtue.School2030Values.Any())
             {
