@@ -40,36 +40,23 @@ else
             ?  $" ({@Encoder.HtmlEncode(searchModel.MatchedQ)})"  : "")
     </p>
 
+    @*<button class="btn btn-outline-secondary mb-2" type="button" @onclick="ToggleFilters">Filtri</button>
+    <div class="@FilterMenuCssClass" id="filtersCollapse">
+        <div class="card card-body">
+            Filtri
+        </div>
+    </div>*@
+
     @if (filteredVirtues.Any())
     {
-         <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#filtersCollapse" aria-expanded="false" aria-controls="filtersCollapse">
-            Filtri
-         </button>
-         <div class="collapse" id="filtersCollapse">
-          <div class="card card-body">
-            Filtri
-          </div>
-        </div>
-
         <table class="table table-striped table-hover table-sm">
             <thead>
                 <tr>
-                    <th>Nosaukums</th>
-                    <th>Saite</th>
-                    <th>Resursa veids</th>
+                    <th>Resursa nosaukums</th>
                     <th>Klase</th>
-                    <th>Tēma</th>
-                    <th>Nodarbība</th>
                     <th>Apraksts</th>
-                    <th>Video garums</th>
-                    <th>Resursa veidotājs</th>
-
-                    <th>SKOLA2030 vērtības</th>
-                    <th>SKOLA2030 tikumi</th>
-                    <th>e-TAP vērtības</th>
-                    <th>e-TAP tikumi</th>
-
-                    <th>Komentāri</th>
+                    <th>Saite uz resursu</th>
+                    <th>Resursa apskates laiks</th>
                 </tr>
             </thead>
             <tbody>
@@ -77,15 +64,15 @@ else
             {
                 <tr>
                     <td>@virtue.Name</td>
-                    <td><a href="@virtue.Url" target="_blank">Saite</a></td>
-                    <td>@virtue.ResourceType</td>               
                     <td>@virtue.Grade</td>
+                    <td>@virtue.Description</td>
+                    <td><a href="@virtue.Url" target="_blank">Saite</a></td>
+                    <td>@virtue.VideoMinutes</td>
+
+                    @*<td>@virtue.ResourceType</td>               
                     <td>@virtue.Topic</td>
                     <td>@virtue.Lesson</td>
-                    <td>@virtue.Description</td>                 
-                    <td>@virtue.VideoMinutes</td>              
                     <td>@virtue.Source</td>
-
                     <td>@foreach (var item in virtue.School2030Values)
                         {
                             <span class="badge rounded-pill bg-secondary ms-1">@item</span>            
@@ -109,7 +96,7 @@ else
                             <span class="badge rounded-pill bg-secondary ms-1">@item</span>            
                         }
                     </td>
-                    <td>@virtue.Comments</td>
+                    <td>@virtue.Comments</td>*@
                 </tr>
             }
             </tbody>

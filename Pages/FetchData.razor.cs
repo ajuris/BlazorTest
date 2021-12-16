@@ -10,8 +10,15 @@ namespace BlazorTest.Pages
         private List<VirtueRecord> virtues = new List<VirtueRecord>();
 
         private List<VirtueRecord> filteredVirtues = new List<VirtueRecord>();
-
         protected SearchModel searchModel { get; set; } = new SearchModel();
+
+        private bool collapseFilterMenu = true;
+        private string? FilterMenuCssClass => collapseFilterMenu ? "collapse" : "";
+
+        private void ToggleFilters()
+        {
+            collapseFilterMenu = !collapseFilterMenu;
+        }
 
 
         protected override async Task OnInitializedAsync()
