@@ -3,6 +3,11 @@
 @inject HttpClient Http
 
 
+<div class="alert alert-light" role="alert">
+  Apraksts meklētājam. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tellus lorem, blandit vitae ipsum eget, tristique mattis metus. 
+  Proin eros nulla, rhoncus vitae odio sit amet, ullamcorper ultrices ex. Cras fringilla orci quis diam suscipit, aliquam tempor lacus tincidunt. 
+</div>
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
 
@@ -29,17 +34,23 @@
 }
 else
 {
-    @if (!string.IsNullOrWhiteSpace(searchModel.Query))
-    {
-        <p>
-            @filteredVirtues.Count rezultāti meklējumam "@Encoder.HtmlEncode(searchModel.Query)"
-            @(!string.IsNullOrEmpty(searchModel.MatchedQ) && !string.Equals(searchModel.Query, searchModel.MatchedQ, StringComparison.InvariantCultureIgnoreCase)
-                ?  $" ({@Encoder.HtmlEncode(searchModel.MatchedQ)})"  : "")
-        </p>
-    }
+    <p>
+        @filteredVirtues.Count rezultāti @(!string.IsNullOrEmpty(searchModel.Query) ? $" meklējumam {@Encoder.HtmlEncode(searchModel.Query)}\"" : "")
+        @(!string.IsNullOrEmpty(searchModel.MatchedQ) && !string.Equals(searchModel.Query, searchModel.MatchedQ, StringComparison.InvariantCultureIgnoreCase)
+            ?  $" ({@Encoder.HtmlEncode(searchModel.MatchedQ)})"  : "")
+    </p>
 
     @if (filteredVirtues.Any())
     {
+         <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#filtersCollapse" aria-expanded="false" aria-controls="filtersCollapse">
+            Filtri
+         </button>
+         <div class="collapse" id="filtersCollapse">
+          <div class="card card-body">
+            Filtri
+          </div>
+        </div>
+
         <table class="table table-striped table-hover table-sm">
             <thead>
                 <tr>
