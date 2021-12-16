@@ -2,6 +2,7 @@ using BlazorTest.Shared;
 using CsvHelper;
 using System.Globalization;
 using CsvHelper.Configuration;
+using Havit.Blazor.Components.Web.Bootstrap;
 
 namespace BlazorTest.Pages
 {
@@ -10,20 +11,31 @@ namespace BlazorTest.Pages
         private List<VirtueRecord> virtues = new List<VirtueRecord>();
 
         private List<VirtueRecord> filteredVirtues = new List<VirtueRecord>();
+
+        private VirtueRecord selectedVirtue = null;
         protected SearchModel searchModel { get; set; } = new SearchModel();
 
         private bool collapseFilterMenu = true;
         private string? FilterMenuCssClass => collapseFilterMenu ? "collapse" : "";
+
+        private HxModal mdModal;
 
         private void ToggleFilters()
         {
             collapseFilterMenu = !collapseFilterMenu;
         }
 
+        protected async Task ShowDetails(VirtueRecord record)
+        {
+            SelectVirtue(record);
+            await mdModal.ShowAsync();
+        }
+
+        protected void SelectVirtue(VirtueRecord record) => selectedVirtue = record;
+
 
         protected override async Task OnInitializedAsync()
         {
-
             var response = await Http.GetAsync("sample-data/virtues.csv");
             response.EnsureSuccessStatusCode();
             await using var stream = await response.Content.ReadAsStreamAsync();
@@ -32,6 +44,7 @@ namespace BlazorTest.Pages
             {
                 var records = csv.GetRecords<VirtueRecord>();
                 virtues = records.ToList();
+                ShowAll();
             }
         }
 

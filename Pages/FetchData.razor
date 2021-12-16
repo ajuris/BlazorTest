@@ -4,8 +4,7 @@
 
 
 <div class="alert alert-light" role="alert">
-  Apraksts meklētājam. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tellus lorem, blandit vitae ipsum eget, tristique mattis metus. 
-  Proin eros nulla, rhoncus vitae odio sit amet, ullamcorper ultrices ex. Cras fringilla orci quis diam suscipit, aliquam tempor lacus tincidunt. 
+  Apraksts meklētājam.....
 </div>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -21,9 +20,12 @@
         <li class="nav-item">
             <button class="btn btn-outline-secondary ms-1 mt-1" type="button" @onclick="ClearResults">Notīrīt rezultātus</button>
         </li>
-        <li class="nav-item">
-            <button class="btn btn-outline-secondary ms-1 mt-1" type="button" @onclick="ShowAll">Rādīt visus ierakstus</button>
-        </li>
+        @if (virtues.Count > filteredVirtues.Count || !filteredVirtues.Any())
+        {
+            <li class="nav-item">
+                <button class="btn btn-outline-secondary ms-1 mt-1" type="button" @onclick="ShowAll">Rādīt visus ierakstus</button>
+            </li>
+        }
       </ul>
   </div>
 </nav>
@@ -40,13 +42,6 @@ else
             ?  $" ({@Encoder.HtmlEncode(searchModel.MatchedQ)})"  : "")
     </p>
 
-    @*<button class="btn btn-outline-secondary mb-2" type="button" @onclick="ToggleFilters">Filtri</button>
-    <div class="@FilterMenuCssClass" id="filtersCollapse">
-        <div class="card card-body">
-            Filtri
-        </div>
-    </div>*@
-
     @if (filteredVirtues.Any())
     {
         <table class="table table-striped table-hover table-sm">
@@ -62,44 +57,123 @@ else
             <tbody>
             @foreach (var virtue in filteredVirtues)
             {
-                <tr>
-                    <td>@virtue.Name</td>
+                <tr >
+                    <td style="cursor:pointer" @onclick="() => ShowDetails(virtue)"><a href=""> @virtue.Name</a></td>
                     <td>@virtue.Grade</td>
                     <td>@virtue.Description</td>
                     <td><a href="@virtue.Url" target="_blank">Saite</a></td>
                     <td>@virtue.VideoMinutes</td>
-
-                    @*<td>@virtue.ResourceType</td>               
-                    <td>@virtue.Topic</td>
-                    <td>@virtue.Lesson</td>
-                    <td>@virtue.Source</td>
-                    <td>@foreach (var item in virtue.School2030Values)
-                        {
-                            <span class="badge rounded-pill bg-secondary ms-1">@item</span>            
-                        }
-                    </td>
-
-                    <td>@foreach (var item in virtue.School2030Virtues)
-                        {
-                            <span class="badge rounded-pill bg-secondary ms-1">@item</span>            
-                        }
-                    </td>
-
-                    <td>@foreach (var item in virtue.EtapValues)
-                        {
-                            <span class="badge rounded-pill bg-secondary ms-1">@item</span>            
-                        }
-                    </td>
-
-                    <td>@foreach (var item in virtue.EtapVirtues)
-                        {
-                            <span class="badge rounded-pill bg-secondary ms-1">@item</span>            
-                        }
-                    </td>
-                    <td>@virtue.Comments</td>*@
                 </tr>
             }
             </tbody>
         </table>    
     }
 }
+
+
+<HxModal @ref="mdModal" 
+    Fullscreen="ModalFullscreen.ExtraLargeDown" 
+    Size="ModalSize.ExtraLarge" 
+    Title="@selectedVirtue?.Name" 
+    Centered="true" 
+    UseStaticBackdrop="false"
+    Scrollable="true">
+    <BodyTemplate>
+        
+        <HxListGroup CssClass="list-group-flush">
+            <HxListGroupItem>
+                <small class="text-muted">Apraksts</small>
+                <p class="mb-1">@selectedVirtue?.Description</p>
+            </HxListGroupItem>
+            <HxListGroupItem>
+                <small class="text-muted">Klase</small>
+                <p class="mb-1">@selectedVirtue?.Grade</p>
+            </HxListGroupItem>
+            <HxListGroupItem>
+                <small class="text-muted">Resursa tips</small>
+                <p class="mb-1">@selectedVirtue?.ResourceType</p>
+            </HxListGroupItem>
+            <HxListGroupItem>
+                <small class="text-muted">Tēma</small>
+                <p class="mb-1">@selectedVirtue?.Topic</p>
+            </HxListGroupItem>
+            <HxListGroupItem>
+                <small class="text-muted">Stunda</small>
+                <p class="mb-1">@selectedVirtue?.Lesson</p>
+            </HxListGroupItem>
+            <HxListGroupItem>
+                <small class="text-muted">Avots</small>
+                <p class="mb-1">@selectedVirtue?.Source</p>
+            </HxListGroupItem>
+            @if (selectedVirtue?.Url != null)
+            {
+                <HxListGroupItem>
+                    <small class="text-muted">Saite</small>
+                    <p class="mb-1">
+                    @if (selectedVirtue.Url.StartsWith("http"))
+                    {
+                        <a href="@selectedVirtue.Url">@selectedVirtue.Url</a>
+                    } else
+                    {
+                        <span>selectedVirtue?.Url</span>
+                    }
+                    </p>
+                </HxListGroupItem>
+            }
+
+
+            @if (selectedVirtue?.School2030Values != null && selectedVirtue.School2030Values.Any())
+            {
+                <HxListGroupItem>
+                    <small class="text-muted">Skola 2030 vērtības</small>
+                    @foreach (var item in @selectedVirtue?.School2030Values)
+                    {
+                        <span class="badge bg-secondary mx-2 mt-1">@item</span>            
+                    }
+                </HxListGroupItem>
+            }
+
+            @if (selectedVirtue?.School2030Virtues != null && selectedVirtue.School2030Virtues.Any())
+            {
+                <HxListGroupItem>
+                    <small class="text-muted">Skola 2030 tikumi</small>
+                    @foreach (var item in @selectedVirtue?.School2030Virtues)
+                    {
+                        <span class="badge bg-secondary mx-2 mt-1">@item</span>            
+                    }
+                </HxListGroupItem>
+            }
+
+            @if (selectedVirtue?.EtapValues != null && selectedVirtue.EtapValues.Any())
+            {
+                <HxListGroupItem>
+                    <small class="text-muted">"e-TAP" vērtības</small>
+                    @foreach (var item in @selectedVirtue?.EtapValues)
+                    {
+                        <span class="badge bg-secondary mx-2 mt-1">@item</span>            
+                    }
+                </HxListGroupItem>
+            }
+
+            @if (selectedVirtue?.EtapVirtues != null && selectedVirtue.EtapVirtues.Any())
+            {
+                <HxListGroupItem>
+                    <small class="text-muted">"e-TAP" tikumi</small>
+                    @foreach (var item in @selectedVirtue?.EtapVirtues)
+                    {
+                        <span class="badge bg-secondary mx-2 mt-1">@item</span>            
+                    }
+                </HxListGroupItem>
+            }
+            
+            @if (!string.IsNullOrWhiteSpace(selectedVirtue?.Comments))
+            {
+                <HxListGroupItem >
+                    <small class="text-muted">Komentārs</small>
+                    <p class="mb-1">@selectedVirtue?.Comments</p>
+                </HxListGroupItem>    
+            }
+    </HxListGroup>
+
+	</BodyTemplate>
+</HxModal>
