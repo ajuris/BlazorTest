@@ -2,27 +2,27 @@
 @using Microsoft.Security.Application
 @inject HttpClient Http
 
-
 <div class="alert alert-light" role="alert">
-
     <h3>Meklēšanas aplikācija “e-Tikumiem”</h3>
-    <p>Ar šo aplikāciju Jūs varat viegli atrast tikumiskās audzināšanas tiešsaistes resursus latviešu valodā. Šobrīd datu bāzē, ko izmanto šī aplikācija, atrodas 130 resursi 
+    <p>Ar šo aplikāciju Jūs varat viegli atrast tikumiskās audzināšanas tiešsaistes resursus latviešu valodā. Šobrīd datu bāzē, ko izmanto šī aplikācija, atrodas @virtues.Count resursi 
         latviešu valodā. Tie ir galvenokārt resursi, kas iekļauti tikumiskās audzināšanas programmas “e-TAP”. Šī programma piedāvā Latvijas kontekstam pielāgotus mācību resursus 
         pirmsskolas un pamatizglītības skolotājiem, lai palīdzētu īstenot tikumisko audzināšanu pirmsskolas izglītības iestādēs un skolās. Vairāk par programmu var uzzināt šajā 
         saitē: <a href="https://www.arete.lu.lv/parnese-izglitiba/tikumiskas-audzinasanas-programma/" target="_blank">https://www.arete.lu.lv/parnese-izglitiba/tikumiskas-audzinasanas-programma/</a>   
     </p>
-    <h3>Kā izmantot šo aplikāciju? </h3>
+    <h3>Kā izmantot šo aplikāciju?</h3>
     <ol>
-        <li>Meklētājā ievadiet atslēgas vārdu - kādu vērtību vai tikumu (skatīties lejā atslēgas vārdu pilno sarakstu).</li>
+        <li>Meklētājā ievadiet atslēgas vārdu - kādu vērtību vai tikumu (skat. lejā atslēgas vārdu pilno sarakstu).</li>
         <li>Meklēšanas rezultātu tabulā parādīsies šādi lauki: resursa nosaukums, klase, veids, apskates ilgums, apraksts</li>
-        <li> Uzklikšķinot uz kāda resursa nosaukumu atveras resursa detalizētais skats jaunā logā ar šādiem papildus laukiem: resursa saite, resursa vieta programmā ‘e-TAP” (kurā programmas tēmā, nodarbībā un aktivitātē tas parādās), resursa veidotāji un visas vērtības un tikumi, kas saistītas ar šo resursu.</li>
+        <li>Uzklikšķinot uz kāda resursa nosaukumu atveras resursa detalizētais skats jaunā logā ar šādiem papildus laukiem: resursa saite, resursa vieta programmā “e-TAP” (kurā programmas tēmā, nodarbībā un aktivitātē tas parādās), resursa veidotāji un visas vērtības un tikumi, kas saistītas ar šo resursu.</li>
     </ol>
     <h3>Meklēšanas atslēgas vārdi </h3>
     <p><b>Skola2030 vērtības:</b> dzīvība (veselība), brīvība, cieņa, ģimene, laulība, darbs, daba, kultūra, Latvijas valsts, latviešu valoda</p>
-    <p><b>Skola2030 vērtības:</b> taisnīgums, tolerance, līdzcietība, solidaritāte, laipnība, atbildība, centība, godīgums, gudrība, drosme, mērenība, savaldība
-</p>
-    <p><b>"e-TAP" vērtības:</b>cilvēks kā persona, cieņa, rūpes, mīlestība, brīvība, atbildība, daba, patiesība, harmonija, miers, saskaņa
-</p>
+    <p>
+        <b>Skola2030 vērtības:</b> taisnīgums, tolerance, līdzcietība, solidaritāte, laipnība, atbildība, centība, godīgums, gudrība, drosme, mērenība, savaldība
+    </p>
+    <p>
+        <b>"e-TAP" vērtības:</b>cilvēks kā persona, cieņa, rūpes, mīlestība, brīvība, atbildība, daba, patiesība, harmonija, miers, saskaņa
+    </p>
     <p><b>"e-TAP" tikumi</b>izpalīdzība, līdzjūtība, empātija, dāsnums, pateicīgums, pašiniciatīva, radošums, pārliecinātība, atvērtība jaunajam, čaklums, neatlaidība (noturība), apņēmīgums, pazemība, zinātkāre, kritiskā spriestspēja, pašiedziļināšanās, attapība, atklātība, pašvadība, draudzīgums, līdzdalīgums, spēja sadarboties</p>
 </div>
 
@@ -32,7 +32,6 @@
     <EditForm Model="@searchModel" OnSubmit="@OnSearch" class="d-flex mt-1">
         <InputText @bind-Value="searchModel.Query" class="form-control" type="search" placeholder="Meklēt" aria-label="Search"  />
         <button class="btn btn-success ms-1" type="submit">Meklēt</button>
-
     </EditForm>
 
     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -63,7 +62,7 @@ else
 
     @if (filteredVirtues.Any())
     {
-        <table class="table table-striped table-hover table-sm">
+        <table class="table table-light table-striped table-hover table-sm">
             <thead>
                 <tr>
                     <th>Resursa nosaukums</th>
@@ -79,7 +78,7 @@ else
                 <tr >
                     <td style="cursor:pointer" @onclick="() => ShowDetails(virtue)"><a href=""> @virtue.Name</a></td>
                     <td>@virtue.ResourceType</td>
-                    <td>@virtue.VideoMinutes</td>
+                    <td>@(!string.IsNullOrWhiteSpace(virtue.VideoMinutes) && virtue.VideoMinutes != "0" ? virtue.VideoMinutes : "")</td>
                     <td>@virtue.Grade</td>
                     <td>@virtue.Description</td>
                 </tr>
@@ -88,7 +87,6 @@ else
         </table>    
     }
 }
-
 
 <HxModal @ref="mdModal" 
     Fullscreen="ModalFullscreen.ExtraLargeDown" 
@@ -124,10 +122,14 @@ else
                 <small class="text-muted">Resursa veids</small>
                 <p class="mb-1">@selectedVirtue?.ResourceType</p>
             </HxListGroupItem>
-            <HxListGroupItem>
-                <small class="text-muted">Apskates ilgums</small>
-                <p class="mb-1">@selectedVirtue?.VideoMinutes</p>
-            </HxListGroupItem>
+
+            @if (!string.IsNullOrWhiteSpace(selectedVirtue?.VideoMinutes) && selectedVirtue.VideoMinutes != "0")
+            {
+                <HxListGroupItem>
+                    <small class="text-muted">Apskates ilgums (min)</small>
+                    <p class="mb-1">@selectedVirtue?.VideoMinutes</p>
+                </HxListGroupItem>
+            }
             <HxListGroupItem>
                 <p class="mb-0">
                     <small class="text-muted">Resursa vieta programmā “e-TAP”</small>
@@ -158,7 +160,7 @@ else
             {
                 <HxListGroupItem>
                     <small class="text-muted">Skola 2030 vērtības</small>
-                    @foreach (var item in @selectedVirtue?.School2030Values)
+                    @foreach (var item in @selectedVirtue.School2030Values)
                     {
                         <span class="badge bg-secondary mx-2 mt-1">@item</span>            
                     }
@@ -169,7 +171,7 @@ else
             {
                 <HxListGroupItem>
                     <small class="text-muted">Skola 2030 tikumi</small>
-                    @foreach (var item in @selectedVirtue?.School2030Virtues)
+                    @foreach (var item in @selectedVirtue.School2030Virtues)
                     {
                         <span class="badge bg-secondary mx-2 mt-1">@item</span>            
                     }
@@ -180,7 +182,7 @@ else
             {
                 <HxListGroupItem>
                     <small class="text-muted">"e-TAP" vērtības</small>
-                    @foreach (var item in @selectedVirtue?.EtapValues)
+                    @foreach (var item in @selectedVirtue.EtapValues)
                     {
                         <span class="badge bg-secondary mx-2 mt-1">@item</span>            
                     }
@@ -191,7 +193,7 @@ else
             {
                 <HxListGroupItem>
                     <small class="text-muted">"e-TAP" tikumi</small>
-                    @foreach (var item in @selectedVirtue?.EtapVirtues)
+                    @foreach (var item in @selectedVirtue.EtapVirtues)
                     {
                         <span class="badge bg-secondary mx-2 mt-1">@item</span>            
                     }
@@ -202,7 +204,7 @@ else
             {
                 <HxListGroupItem >
                     <small class="text-muted">Komentārs</small>
-                    <p class="mb-1">@selectedVirtue?.Comments</p>
+                    <p class="mb-1">@selectedVirtue.Comments</p>
                 </HxListGroupItem>    
             }
     </HxListGroup>

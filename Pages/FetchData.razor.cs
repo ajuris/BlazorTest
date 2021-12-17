@@ -52,6 +52,7 @@ namespace BlazorTest.Pages
         {
             if (!string.IsNullOrWhiteSpace(searchModel?.Query))
             {
+                searchModel.MatchedQ = "";
                 var q = searchModel.Query.ToLowerInvariant();
 
                 filteredVirtues = virtues.Where(x =>
