@@ -87,6 +87,7 @@ namespace BlazorTest.Pages
         {
             filteredVirtues.Clear();
             searchModel.Query = "";
+            searchModel.MatchedQ = "";
         }
 
         private CsvConfiguration CsvConfig = new CsvConfiguration(new CultureInfo("lv-lv"))

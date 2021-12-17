@@ -50,8 +50,6 @@ else
                     <th>Resursa nosaukums</th>
                     <th>Klase</th>
                     <th>Apraksts</th>
-                    <th>Saite uz resursu</th>
-                    <th>Resursa apskates laiks</th>
                 </tr>
             </thead>
             <tbody>
@@ -61,8 +59,6 @@ else
                     <td style="cursor:pointer" @onclick="() => ShowDetails(virtue)"><a href=""> @virtue.Name</a></td>
                     <td>@virtue.Grade</td>
                     <td>@virtue.Description</td>
-                    <td><a href="@virtue.Url" target="_blank">Saite</a></td>
-                    <td>@virtue.VideoMinutes</td>
                 </tr>
             }
             </tbody>
@@ -98,7 +94,7 @@ else
                 <p class="mb-1">@selectedVirtue?.Topic</p>
             </HxListGroupItem>
             <HxListGroupItem>
-                <small class="text-muted">Stunda</small>
+                <small class="text-muted">Nodarbība</small>
                 <p class="mb-1">@selectedVirtue?.Lesson</p>
             </HxListGroupItem>
             <HxListGroupItem>
@@ -112,7 +108,7 @@ else
                     <p class="mb-1">
                     @if (selectedVirtue.Url.StartsWith("http"))
                     {
-                        <a href="@selectedVirtue.Url">@selectedVirtue.Url</a>
+                        <a href="@selectedVirtue.Url" target="_blank">@selectedVirtue.Url</a>
                     } 
                     else
                     {
@@ -121,6 +117,10 @@ else
                     </p>
                 </HxListGroupItem>
             }
+            <HxListGroupItem>
+                <small class="text-muted">Video ilgums</small>
+                <p class="mb-1">@selectedVirtue?.VideoMinutes</p>
+            </HxListGroupItem>
 
             @if (selectedVirtue?.School2030Values != null && selectedVirtue.School2030Values.Any())
             {
