@@ -70,7 +70,7 @@ else
                 <tr>
                     <th>Resursa nosaukums</th>
                     <th>Resursa veids</th>
-                    <th>Apskates ilgums</th>
+                    <th>Apskates ilgums (minūtes)</th>
                     <th>Klase</th>
                     <th>Apraksts</th>
                 </tr>
@@ -125,7 +125,7 @@ else
             @if (!string.IsNullOrWhiteSpace(selectedVirtue?.VideoMinutes) && selectedVirtue.VideoMinutes != "0")
             {
                 <HxListGroupItem>
-                    <small class="text-muted">Apskates ilgums (min)</small>
+                    <small class="text-muted">Apskates ilgums (minūtes)</small>
                     <p class="mb-1">@selectedVirtue?.VideoMinutes</p>
                 </HxListGroupItem>
             }
